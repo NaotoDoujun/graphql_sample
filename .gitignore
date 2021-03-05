@@ -1,0 +1,7 @@
+.vscode
+.DS_Store
+bin
+obj
+Migrations
+Properties
+bff.db
