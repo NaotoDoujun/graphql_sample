@@ -22,6 +22,7 @@ namespace Bff
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=bff.db"));
+      services.AddCors();
       services.AddGraphQLServer()
         .AddQueryType<Query>()
         .AddSubscriptionType<Subscription>()
@@ -46,6 +47,7 @@ namespace Bff
       app.UseWebSockets();
       app.UseRouting();
       app.UseEndpoints(x => x.MapGraphQL());
+      app.UseCors(builder => builder.WithOrigins("http://localhost:3000"));
 
     }
   }
