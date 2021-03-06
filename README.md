@@ -1,13 +1,16 @@
 # graphql_sample
+
 ## Backend for frontend
 using hot chocolate v11.0.9  
 application db is sqlite  
 
-### first db migrations
+### first db migrations and launch
 ```bash
+cd Bff
 dotnet restore  
 dotnet ef migrations add Initial  
 dotnet ef database update  
+dotnet run 
 ```
 
 ### graphql endpoint
@@ -20,6 +23,7 @@ check for websocket subscription.
 
 ### first launch
 ```bash
+cd Front
 npm install
 npm start
 ```
