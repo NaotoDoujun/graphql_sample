@@ -9,10 +9,10 @@ application db is sqlite
 ### first db migrations and launch
 ```bash
 cd Bff
-dotnet restore  
-dotnet ef migrations add Initial  
-dotnet ef database update  
-dotnet run 
+dotnet restore
+dotnet ef migrations add Initial
+dotnet ef database update
+dotnet run
 ```
 
 ### graphql endpoint
