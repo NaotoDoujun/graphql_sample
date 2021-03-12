@@ -7,7 +7,6 @@ namespace Bff.Models
     public int ID { get; set; }
     public int Count { get; set; }
     public DateTime RecordTime { get; set; }
-    public DateTime UpdateTime { get; set; }
   }
 
 }

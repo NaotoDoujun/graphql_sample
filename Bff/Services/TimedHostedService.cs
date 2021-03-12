@@ -14,6 +14,7 @@ namespace Bff.Services
     private int executionCount = 100;
     private readonly ILogger<TimedHostedService> _logger;
     private Timer _timer;
+    readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
 
     public TimedHostedService(IServiceScopeFactory scopeFactory, ILogger<TimedHostedService> logger)
     {
@@ -28,7 +29,7 @@ namespace Bff.Services
       _logger.LogInformation("Timed Hosted Service running.");
 
       _timer = new Timer(HandleTimerCallback, null, TimeSpan.Zero,
-          TimeSpan.FromSeconds(5));
+          TimeSpan.FromMilliseconds(20));
 
       return Task.CompletedTask;
     }
@@ -38,20 +39,26 @@ namespace Bff.Services
       using var scope = _scopeFactory.CreateScope();
       var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
       var eventSender = scope.ServiceProvider.GetRequiredService<ITopicEventSender>();
-      var count = Interlocked.Increment(ref executionCount);
-      var now = DateTime.Now;
-      var counter = new Counter
+      await Semaphore.WaitAsync().ConfigureAwait(false);
+      try
       {
-        Count = count,
-        RecordTime = now,
-        UpdateTime = now
-      };
-      await dbContext.Counters.AddAsync(counter);
-      await dbContext.SaveChangesAsync();
-      await eventSender.SendAsync("ReturnedCounter", counter);
-      _logger.LogInformation(
-          "Timed Hosted Service is working. Count: {Count}", count);
-
+        var count = Interlocked.Increment(ref executionCount);
+        var now = DateTime.Now;
+        var counter = new Counter
+        {
+          Count = count,
+          RecordTime = now
+        };
+        await dbContext.Counters.AddAsync(counter);
+        await dbContext.SaveChangesAsync();
+        await eventSender.SendAsync("ReturnedCounter", counter);
+        _logger.LogInformation(
+            "Timed Hosted Service is working. Count: {Count}", count);
+      }
+      finally
+      {
+        Semaphore.Release();
+      }
     }
 
     public Task StopAsync(CancellationToken stoppingToken)
