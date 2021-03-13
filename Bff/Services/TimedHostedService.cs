@@ -29,7 +29,7 @@ namespace Bff.Services
       _logger.LogInformation("Timed Hosted Service running.");
 
       _timer = new Timer(HandleTimerCallback, null, TimeSpan.Zero,
-          TimeSpan.FromMilliseconds(20));
+          TimeSpan.FromSeconds(5));
 
       return Task.CompletedTask;
     }
