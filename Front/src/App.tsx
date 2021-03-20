@@ -11,7 +11,10 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(2),
+    paddingTop: theme.spacing(8),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -39,7 +42,7 @@ function App() {
   )
   return (
     <BrowserRouter>
-       <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className={classes.root}>
           <AppBar position="fixed">
@@ -48,10 +51,10 @@ function App() {
             </Toolbar>
           </AppBar>
           <main className={classes.content}>
-          <Switch>
-            <Route exact path='/' component={Count} />
-            <Route path='/sub' component={Sub} />
-          </Switch>
+            <Switch>
+              <Route exact path='/' component={Count} />
+              <Route path='/sub' component={Sub} />
+            </Switch>
           </main>
         </div>
       </ThemeProvider>

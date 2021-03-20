@@ -35,7 +35,7 @@ const Count: React.FC<any> = (props: any) => {
   React.useEffect(
     () => subscribeToMore({
       document: COUNT_SUBSCRIPTION,
-      updateQuery: (prev, {subscriptionData}) => {
+      updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
         const newCount = subscriptionData.data.onRecorded
         return Object.assign({}, prev, {
@@ -48,7 +48,7 @@ const Count: React.FC<any> = (props: any) => {
 
   if (loading) return <CircularProgress />
   if (error) return <p>Got Error...</p>
-  
+
   const latest = data.counters.slice(-1)[0] as Counter
 
   return (
