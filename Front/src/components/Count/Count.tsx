@@ -1,19 +1,28 @@
 import React from 'react'
-import { useSubscription, gql } from '@apollo/client'
-import { CircularProgress } from '@material-ui/core'
+import { useQuery, gql } from '@apollo/client'
+import { CircularProgress, Button } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 interface Counter {
-  count: number;
-  recordTime: string;
+  id: number
+  count: number
+  recordTime: string
 }
 
-interface Record {
-  onRecorded: Counter;
-}
+const COUNT_QUERY = gql`
+  query Counters {
+    counters {
+      iD
+      count
+      recordTime
+    }
+  }
+`;
 
 const COUNT_SUBSCRIPTION = gql`
   subscription OnRecorded {
     onRecorded {
+      iD
       count
       recordTime
     }
@@ -21,13 +30,35 @@ const COUNT_SUBSCRIPTION = gql`
 `;
 
 const Count: React.FC<any> = (props: any) => {
-  const { loading, data } = useSubscription<Record>(COUNT_SUBSCRIPTION);
+  const { loading, error, data, subscribeToMore } = useQuery(COUNT_QUERY)
+
+  React.useEffect(
+    () => subscribeToMore({
+      document: COUNT_SUBSCRIPTION,
+      updateQuery: (prev, {subscriptionData}) => {
+        if (!subscriptionData.data) return prev
+        const newCount = subscriptionData.data.onRecorded
+        return Object.assign({}, prev, {
+          counters: [...prev.counters, newCount],
+        })
+      },
+    }),
+    [subscribeToMore]
+  )
+
   if (loading) return <CircularProgress />
+  if (error) return <p>Got Error...</p>
+  
+  const latest = data.counters.slice(-1)[0] as Counter
+
   return (
     <div>
       <h5>Counter</h5>
-      <p>{!loading && data?.onRecorded.count}</p>
-      <p>{!loading && data?.onRecorded.recordTime}</p>
+      <p>latest count is {latest.count}</p>
+      <p>recored at {latest.recordTime}</p>
+      <Button variant="contained" component={Link} to="sub">
+        Sub
+      </Button>
     </div>
   );
 }

@@ -2,7 +2,8 @@ import React from 'react'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles'
-import { Count } from './components'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Count, Sub } from './components'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,20 +38,24 @@ function App() {
     [prefersDarkMode],
   )
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div className={classes.root}>
-        <AppBar position="fixed">
-          <Toolbar>
-            <Typography variant="h6">Test</Typography>
-          </Toolbar>
-        </AppBar>
-        <main className={classes.content}>
-          <h5>Counter</h5>
-          <Count />
-        </main>
-      </div>
-    </ThemeProvider>
+    <BrowserRouter>
+       <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className={classes.root}>
+          <AppBar position="fixed">
+            <Toolbar>
+              <Typography variant="h6">Test</Typography>
+            </Toolbar>
+          </AppBar>
+          <main className={classes.content}>
+          <Switch>
+            <Route exact path='/' component={Count} />
+            <Route path='/sub' component={Sub} />
+          </Switch>
+          </main>
+        </div>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
