@@ -55,7 +55,7 @@ const Count: React.FC<any> = (props: any) => {
     <div>
       <h5>Counter</h5>
       <p>latest count is {latest.count}</p>
-      <p>recored at {latest.recordTime}</p>
+      <p>recorded at {latest.recordTime}</p>
       <Button variant="contained" component={Link} to="sub">
         Sub
       </Button>
