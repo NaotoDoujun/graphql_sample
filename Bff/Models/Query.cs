@@ -4,18 +4,18 @@ using HotChocolate;
 using Bff.Services;
 namespace Bff.Models
 {
-    public class Query
+  public class Query
+  {
+    public IQueryable<Counter> GetCounters([Service] ApplicationDbContext context)
     {
-        public IQueryable<Counter> GetCounters([Service] ApplicationDbContext context)
-        {
-            return context.Counters.AsQueryable();
-        }
-        
-        public IQueryable<Counter> GetCounter(int id, [Service] ApplicationDbContext context)
-        {
-            return context.Counters.Where(counter => counter.ID == id);
-        }
+      return context.Counters.AsQueryable();
+    }
 
-        public Task<string> GetHey([Service] ITimedHostedService service) => service.HeyAsync();
+    public IQueryable<Counter> GetCounter(int id, [Service] ApplicationDbContext context)
+    {
+      return context.Counters.Where(counter => counter.Id == id);
+    }
+
+    public Task<string> GetHey([Service] ITimedHostedService service) => service.HeyAsync();
   }
 }

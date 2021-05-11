@@ -1,7 +1,7 @@
 # graphql_sample
 
 ## Backend for frontend
-using hot chocolate v11.0.9  
+using hot chocolate v11.2.2  
 https://chillicream.com/docs/hotchocolate/  
 
 application db is sqlite  

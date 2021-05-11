@@ -11,7 +11,7 @@ namespace Bff.Services
   public class TimedHostedService : ITimedHostedService, IHostedService, IDisposable
   {
     private readonly IServiceScopeFactory _scopeFactory;
-    private int executionCount = 100;
+    private int executionCount = 0;
     private readonly ILogger<TimedHostedService> _logger;
     private Timer _timer;
     readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
@@ -29,7 +29,7 @@ namespace Bff.Services
       _logger.LogInformation("Timed Hosted Service running.");
 
       _timer = new Timer(HandleTimerCallback, null, TimeSpan.Zero,
-          TimeSpan.FromSeconds(5));
+          TimeSpan.FromMilliseconds(1000));
 
       return Task.CompletedTask;
     }
@@ -42,6 +42,7 @@ namespace Bff.Services
       await Semaphore.WaitAsync().ConfigureAwait(false);
       try
       {
+        if (executionCount >= 100) executionCount = 0;
         var count = Interlocked.Increment(ref executionCount);
         var now = DateTime.Now;
         var counter = new Counter

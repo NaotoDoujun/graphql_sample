@@ -7,7 +7,7 @@ const Sub: React.FC<any> = (props: any) => {
     query: gql`
         query GetCounters {
           counters {
-            iD
+            id
             count
             recordTime
           }

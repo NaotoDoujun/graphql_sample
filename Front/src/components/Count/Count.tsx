@@ -12,7 +12,7 @@ interface Counter {
 const COUNT_QUERY = gql`
   query Counters {
     counters {
-      iD
+      id
       count
       recordTime
     }
@@ -22,7 +22,7 @@ const COUNT_QUERY = gql`
 const COUNT_SUBSCRIPTION = gql`
   subscription OnRecorded {
     onRecorded {
-      iD
+      id
       count
       recordTime
     }

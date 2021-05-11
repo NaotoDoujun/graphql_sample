@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Autofac.Extensions.DependencyInjection;
+using NLog.Web;
 
 namespace Bff
 {
@@ -15,9 +17,15 @@ namespace Bff
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureLogging(logging =>
+            {
+              logging.ClearProviders();
+              logging.SetMinimumLevel(LogLevel.Trace);
+            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
               webBuilder.UseStartup<Startup>();
-            });
+            })
+            .UseNLog();
   }
 }
